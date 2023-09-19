@@ -3,11 +3,18 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/bwmarrin/discordgo"
+)
+
+const (
+	mercenairesRoleID = 1153682851292778646
+	barmanRoleID      = 1153682995706859641
+	guildID           = 1148626765577723914
 )
 
 var (
@@ -47,6 +54,20 @@ func main() {
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
 	<-sc
 
+	// Retrieve a list of members for the specified guild.
+	members, err := discordgo.GuildMembers(guildID, "", 1000) // You can adjust the limit as needed.
+	if err != nil {
+		log.Println("Error fetching members:", err)
+	}
+
+	// Iterate through the list of members and access their roles.
+	for _, member := range members {
+		roles := getMemberRoles(member)
+
+		// Print or process member roles as needed.
+		log.Printf("Member %s#%s Roles: %v", member.User.Username, member.User.Discriminator, roles)
+	}
+
 	// Cleanly close down the Discord session.
 	discord.Close()
 }
@@ -59,12 +80,23 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 	// If the message is "ping" reply with "Pong!"
-	if m.Content == "ping" {
-		s.ChannelMessageSend(m.ChannelID, "Pong!")
+	if m.Content == "/lol" {
+		s.ChannelMessageSend(m.ChannelID, "mdr!")
 	}
 
 	// If the message is "pong" reply with "Ping!"
-	if m.Content == "pong" {
-		s.ChannelMessageSend(m.ChannelID, "Ping!")
+	if m.Content == "/mdr" {
+		s.ChannelMessageSend(m.ChannelID, "lol!")
 	}
+}
+
+// getMemberRoles retrieves the roles for a given member.
+func getMemberRoles(member *discordgo.Member) []string {
+	roles := make([]string, len(member.Roles))
+
+	for i, roleID := range member.Roles {
+		roles[i] = roleID
+	}
+
+	return roles
 }

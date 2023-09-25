@@ -1,5 +1,10 @@
 version: "3"
 
+env:
+  ENV: testing
+
+dotenv: ['.env']
+
 tasks:
     build:
         desc: Build the app
@@ -19,9 +24,9 @@ tasks:
     run_select: 
         desc: Run the app
         cmds:
-        - GOFLAGS=-mod=mod go run select.go -token $DISCORD_TOKEN
+        - GOFLAGS=-mod=mod go run select/select.go -token $DISCORD_TOKEN
     
     run_test: 
         desc: Run the app
         cmds:
-        - GOFLAGS=-mod=mod go run test.go -token $DISCORD_TOKEN
+        - GOFLAGS=-mod=mod go run test/test.go -token $DISCORD_TOKEN

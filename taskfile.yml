@@ -1,0 +1,27 @@
+version: "3"
+
+tasks:
+    build:
+        desc: Build the app
+        cmds:
+        - GOFLAGS=-mod=mod go build -o bin/gopher-bot-discord main.go 
+
+    run: 
+        desc: Run the app
+        cmds:
+        - GOFLAGS=-mod=mod go run main.go -token $DISCORD_TOKEN
+
+    bot:
+        desc: Execute the bot
+        cmds:
+        - ./bin/gopher-bot-discord -token $DISCORD_TOKEN
+
+    run_select: 
+        desc: Run the app
+        cmds:
+        - GOFLAGS=-mod=mod go run select.go -token $DISCORD_TOKEN
+    
+    run_test: 
+        desc: Run the app
+        cmds:
+        - GOFLAGS=-mod=mod go run test.go -token $DISCORD_TOKEN

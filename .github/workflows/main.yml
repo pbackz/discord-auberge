@@ -1,0 +1,26 @@
+name: Send New Resources Report 
+run-name: Send New Resources Report 
+
+permissions: write-all
+
+on:
+  workflow_dispatch:
+    
+jobs:
+  new-staging-resources-to-slack:
+    strategy:
+      matrix:
+        environment: [prod, dev]
+    runs-on: ubuntu-latest
+    environment: ${{ matrix.environment }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run report script
+        id: run_report
+        working-directory: ./
+        env:
+          ROLE: ${{ vars.TEST_VAR }}
+        run: echo "${ROLE}"
